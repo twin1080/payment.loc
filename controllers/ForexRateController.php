@@ -29,19 +29,14 @@ class ForexRateController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-            'rules' => [
+                'rules' => [
                     [
                         'actions' => ['index', 'view', 'update', 'create', 'delete'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['admin'],
                     ],
-                    
-                    [
-                        'actions' => ['index', 'view', 'update', 'create', 'delete'],
-                        'allow' => false,
-                        'roles' => ['?'],
-                    ],
-            ]],
+                ]   
+            ],
         ];
     }
 

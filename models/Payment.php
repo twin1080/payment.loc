@@ -19,9 +19,11 @@ use \DateTime;
  * @property string $Time
  * @property integer $done
  * @property integer $CurrencyID
+ * @property integer $UserID
  *
  * @property Forexrate $currency
  * @property Custom $custom
+ * @property User $user
  */
 class Payment extends \yii\db\ActiveRecord
 {
@@ -43,7 +45,7 @@ class Payment extends \yii\db\ActiveRecord
                             'ExpirationDate' => 
                             function ($value) {
                                 $parsedDate = DateTime::createFromFormat('m / y', $value)->format('Y-m-01');
-                                return isset($parsedDate) && trim($parsedDate)!=='' ? $parsedDate : null; }
+                                return isset($parsedDate) && trim($parsedDate)!=='' ? $parsedDate : null; },
                         ],
                         'typecastAfterValidate' => true,
                         'typecastBeforeSave' => false,
@@ -51,6 +53,7 @@ class Payment extends \yii\db\ActiveRecord
                     ],
                 ];
     }
+
     
     /**
      * @inheritdoc
@@ -74,11 +77,11 @@ class Payment extends \yii\db\ActiveRecord
             [['CardNumder'], \app\components\CreditCardValidator::className()],
             [['ExpirationDate'], \app\components\ExpDateValidator::className()],
             [['cvv'], \app\components\CvvValidator::className()],
+            [['UserID'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['UserID' => 'id']],
         ];
     }
-    
 
-    
+
 
     /**
      * @inheritdoc
@@ -96,6 +99,7 @@ class Payment extends \yii\db\ActiveRecord
             'Time' => 'Time',
             'done' => 'Done',
             'CurrencyID' => 'Currency',
+            'UserID' => 'User ID',
         ];
     }
 
@@ -113,5 +117,13 @@ class Payment extends \yii\db\ActiveRecord
     public function getCustom()
     {
         return $this->hasOne(Custom::className(), ['ID' => 'CustomID']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'UserID']);
     }
 }

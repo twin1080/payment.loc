@@ -17,6 +17,7 @@ use yii\helpers\FileHelper;
 use yii\helpers\VarDumper;
 use yii\i18n\GettextPoFile;
 
+
 /**
  * Extracts messages to be translated from source files.
  *

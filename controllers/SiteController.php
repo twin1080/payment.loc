@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\SignupForm;
 use yii\helpers\Url;
 class SiteController extends Controller
 {
@@ -28,7 +29,7 @@ class SiteController extends Controller
                     ],
                     
                     [
-                        'actions' => ['login'],
+                        'actions' => ['login', 'signup'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -76,16 +77,18 @@ class SiteController extends Controller
      * @return string
      */
     public function actionIndex()
-    {
-                    
+    {                    
         if (Yii::$app->user->isGuest){
             return $this->render('indexguest');
         }
-        else {
-            return $this->render('index');}
+        else if (Yii::$app->user->identity->isAdmin())
+        {
+            return $this->render('indexadmin');}
+        else{
+            return $this->render('index');
+        }
     }
 
-    
     /**
      * Login action.
      *
@@ -98,8 +101,6 @@ class SiteController extends Controller
         }
         
         $model = new LoginForm();
-        
-        
          
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
@@ -121,6 +122,26 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+    
+        /**
+     * Signs user up.
+     *
+     * @return mixed
+     */
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            }
+        }
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
     }
 
 }
