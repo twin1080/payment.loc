@@ -31,8 +31,11 @@ $this->title = 'Payment acceptance';
 
     
   <div class="body-content">
-    
-            <div class="col-lg-4">
+           <div class="col-lg-1">
+            </div>
+            <div class="col-lg-1">
+            </div>
+            <div class="col-lg-6">
                 <h2>My payments</h2>
 
                 <p>There is list of all your payments which you made.</p>
