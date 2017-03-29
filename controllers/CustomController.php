@@ -34,14 +34,7 @@ class CustomController extends Controller
                     [
                         'actions' => ['index', 'view', 'update', 'create', 'delete'],
                         'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    
-                    [
-                        'actions' => ['index', 'view', 'update', 'create', 'delete'],
-                        'allow' => false,
-                        'roles' => ['?'],
-            
+                        'roles' => ['admin'],
                     ],
                 ]   
             ],

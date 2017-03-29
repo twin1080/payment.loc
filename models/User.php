@@ -69,6 +69,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return $this->authKey === $authKey;
     }
+    
+    public function isAdmin()
+    {
+        return Yii::$app->user->can('admin');
+    }
 
     /**
      * Validates password
@@ -80,6 +85,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         //return $this->password === Yii::$app->security->generatePasswordHash($password);
         return Yii::$app->security->validatePassword($password, $this->password);
+    }
+    
+    public function setPassword($password)
+    {
+        $this->password = Yii::$app->security->generatePasswordHash($password);
     }
 }
 

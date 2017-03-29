@@ -11,7 +11,7 @@ return [
     'language' => 'en-US',
     'components' => [
         'db' => $dbParams,
-        'mailer' => [
+    'mailer' => [
             'useFileTransport' => true,
         ],
         'assetManager' => [            

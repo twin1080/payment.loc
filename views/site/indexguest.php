@@ -16,14 +16,14 @@ $this->title = 'Payment acceptance';
         
         <p class="lead">
         <?php
-        echo 'If you are admin, please login for watching the list of payments. You can go to form for payment if you are not.' ?>
+        echo 'If you are admin, please login as admin for watching the list of payments. If you want to waste your money, please, login. If you do not have account yet, please, sign up.'  ?>
         </p>
         
         <p>
             <?php
                 $linkToLogin = Html::a('Login',Url::to(['site/login']), ['class' => 'btn btn-lg btn-success', 'style' => 'width: 160px; margin: 10px;']);
-                 $linkToPay = Html::a('Pay',Url::to(['payment/create']), ['class' => 'btn btn-lg btn-success', 'style' => 'width: 160px; margin: 10px;']);
-            echo $linkToPay.$linkToLogin?>
+                $linkToSignup = Html::a('Sign up',Url::to(['site/signup']), ['class' => 'btn btn-lg btn-success', 'style' => 'width: 160px; margin: 10px;']);//160px; margin: 10px;']);
+            echo $linkToLogin.$linkToSignup ?>
         </p>
     </div>
 </div>

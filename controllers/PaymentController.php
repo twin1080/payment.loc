@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \DateTime;
+use yii\web\ForbiddenHttpException;
 
 /**
  * PaymentController implements the CRUD actions for Payment model.
@@ -32,17 +33,19 @@ class PaymentController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'update', 'create'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['customer'],
                     ],
-                    
                     [
-                        'actions' => ['create'],
-                        'allow' => true,
+                        'allow' => false,
                         'roles' => ['?'],
                     ],
-            
+                    [
+                        'actions' => ['index', 'view', 'update'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
                 ],
             ],
         ];
@@ -54,15 +57,25 @@ class PaymentController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Payment::find(),
-        ]);
+        if (Yii::$app->user->identity->isAdmin())
+        {
+                     
+            $dataProvider = new ActiveDataProvider([
+            'query' => Payment::find()]);
+        }
+        else
+        {
+               
+            $dataProvider = new ActiveDataProvider([
+            'query' => Payment::find()->where(['UserID'=>Yii::$app->user->getId()])]);
+        }
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
     }
 
+    
     /**
      * Displays a single Payment model.
      * @param integer $id
@@ -70,8 +83,15 @@ class PaymentController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        
+        if (!Yii::$app->user->identity->isAdmin() && $model->UserID !== Yii::$app->user->getId())
+        {
+              throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));        
+        }
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -83,7 +103,8 @@ class PaymentController extends Controller
     public function actionCreate()
     {
         $model = new Payment();
-
+        $model->UserID = Yii::$app->user->getId();
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             
             
@@ -106,8 +127,12 @@ class PaymentController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         
+        if (!Yii::$app->user->identity->isAdmin() && $model->UserID !== Yii::$app->user->getId())
+        {
+              throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));        
+        }
+                
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
                    
             return $this->redirect(['view', 'id' => $model->ID]);
