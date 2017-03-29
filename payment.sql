@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Мар 29 2017 г., 07:44
+-- Время создания: Мар 29 2017 г., 10:10
 -- Версия сервера: 10.1.21-MariaDB
 -- Версия PHP: 5.6.30
 
@@ -108,18 +108,19 @@ CREATE TABLE `auth_rule` (
 CREATE TABLE `custom` (
   `ID` int(11) NOT NULL,
   `Time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `Sum` decimal(10,2) NOT NULL
+  `Sum` decimal(10,2) NOT NULL,
+  `UserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 --
 -- Дамп данных таблицы `custom`
 --
 
-INSERT INTO `custom` (`ID`, `Time`, `Sum`) VALUES
-(1, '2017-03-24 10:41:29', '5000.00'),
-(2, '2017-03-24 10:54:46', '2000.00'),
-(3, '2017-03-24 11:02:26', '3000.00'),
-(4, '2017-03-28 09:13:25', '5000.00');
+INSERT INTO `custom` (`ID`, `Time`, `Sum`, `UserID`) VALUES
+(1, '2017-03-24 10:41:29', '5000.00', 104),
+(2, '2017-03-24 10:54:46', '2000.00', 103),
+(3, '2017-03-24 11:02:26', '3000.00', 103),
+(4, '2017-03-28 09:13:25', '5000.00', 103);
 
 -- --------------------------------------------------------
 
@@ -186,7 +187,13 @@ INSERT INTO `payment` (`ID`, `CardNumder`, `CardHolder`, `ExpirationDate`, `cvv`
 (17, '4485285554541006', 'QWE', '2020-02-01', '233', 2, '2000.00', '2017-03-27 13:57:39', 1, 1, 100),
 (18, '4539149951080974', 'R', '2022-02-01', '222', 4, '3333.00', '2017-03-28 09:26:52', 1, 1, 100),
 (19, '4539598525969890', 'QWE', '2022-02-01', '222', 1, '2000.00', '2017-03-28 13:41:30', 1, 1, 100),
-(20, '30583494817322', 'QWE', '2018-12-01', '333', 1, '2000.00', '2017-03-29 05:05:21', 1, 1, 104);
+(20, '30583494817322', 'QWE', '2018-12-01', '333', 1, '2000.00', '2017-03-29 05:05:21', 1, 1, 104),
+(21, '4491904431661538', 'QWE', '2032-12-01', '233', 1, '222.00', '2017-03-29 06:55:06', 1, 1, 104),
+(22, '4491904431661538', 'QWE', '2020-12-01', '123', 1, '123.00', '2017-03-29 06:56:18', 1, 1, 104),
+(23, '4491904431661538', 'QWE', '2021-11-01', '111', 1, '123.00', '2017-03-29 06:57:44', 1, 1, 104),
+(24, '4491904431661538', 'QWE', '2021-12-01', '121', 1, '123.00', '2017-03-29 06:58:48', 1, 2, 104),
+(25, '4491904431661538', 'QWE', '2021-12-01', '111', 1, '123.00', '2017-03-29 07:24:11', 1, 1, 104),
+(26, '4491904431661538', 'QWE', '2021-12-01', '111', 1, '123.00', '2017-03-29 07:35:05', 1, 1, 104);
 
 -- --------------------------------------------------------
 
@@ -254,7 +261,8 @@ ALTER TABLE `auth_rule`
 --
 ALTER TABLE `custom`
   ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `ID` (`ID`);
+  ADD UNIQUE KEY `ID` (`ID`),
+  ADD KEY `UserID` (`UserID`);
 
 --
 -- Индексы таблицы `forexrate`
@@ -299,7 +307,7 @@ ALTER TABLE `forexrate`
 -- AUTO_INCREMENT для таблицы `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT для таблицы `user`
 --
@@ -327,6 +335,12 @@ ALTER TABLE `auth_item`
 ALTER TABLE `auth_item_child`
   ADD CONSTRAINT `auth_item_child_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `custom`
+--
+ALTER TABLE `custom`
+  ADD CONSTRAINT `Custom_User` FOREIGN KEY (`UserID`) REFERENCES `user` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `payment`

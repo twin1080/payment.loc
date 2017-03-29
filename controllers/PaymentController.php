@@ -103,11 +103,10 @@ class PaymentController extends Controller
     public function actionCreate()
     {
         $model = new Payment();
-        $model->UserID = Yii::$app->user->getId();
         
+        $model->UserID = Yii::$app->user->getId();
+            
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            
-            
             return $this->redirect(['site/index','done'=>true]); 
             
             //return $this->redirect(['view', 'id' => $model->ID]);

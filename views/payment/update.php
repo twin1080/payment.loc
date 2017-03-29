@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Breadcrumbs;
 use app\models\ForexRate;
+use app\models\Custom;
 /* @var $this yii\web\View */
 /* @var $model app\models\Payment */
 $this->registerCssFile('css/creditcard.css');
@@ -50,15 +51,18 @@ $this->params['breadcrumbs'][] = 'Update';
     <?= $form->field($model, 'ExpirationDate')->textInput(['type'=>'tel',
                                                            'placeholder'=>'MM / YY',
                                                            'required' => true,
-                                                           'value' =>  date('Y-m-d', strtotime( $model->ExpirationDate ))  != '1970-01-01' ? date( 'm / y', strtotime( $model->ExpirationDate ) ) : $model->ExpirationDate 
-                                                                                          ]) ?>
+                                                           'value' =>  date('Y-m-d', strtotime( $model->ExpirationDate ))  != '1970-01-01' ? date( 'm / y', strtotime( $model->ExpirationDate ) ) : $model->ExpirationDate]) ?>
 
     <?= $form->field($model, 'cvv')->textInput(['maxlength' => true,
                                                 'type'=>"tel", 
                                                 'placeholder'=>"CVC",
                                                 'required'=>true]) ?>
 
-    <?= $form->field($model, 'CustomID')->textInput() ?>
+
+             <?=$form->field($model, 'CustomID')->dropdownList(
+        Custom::find()->select(['ID', 'ID'])->where(['=','UserID', $model->UserID])->indexBy('ID')->column(),
+        ['prompt'=>'Select order number'])
+    ?>
 
     <?= $form->field($model, 'Sum')->textInput(['maxlength' => true]) ?>
     

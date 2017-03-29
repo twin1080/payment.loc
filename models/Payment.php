@@ -64,6 +64,7 @@ class Payment extends \yii\db\ActiveRecord
             [['CardNumder', 'CardHolder', 'ExpirationDate', 'cvv', 'CustomID', 'Sum', 'CurrencyID'], 'required'],
             [['ExpirationDate', 'Time'], 'safe'],
             [['CustomID', 'done', 'CurrencyID'], 'integer'],
+            [['CustomID'], \app\components\PaymentValidator::className()],
             [['Sum'], 'number'],
             [['CardNumder'], 'string', 'max' => 19],
             [['CardHolder'], 'string', 'max' => 255],
@@ -125,5 +126,10 @@ class Payment extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'UserID']);
+    }
+    
+    public function getSumInUSD()
+    {
+        return $this->Sum / $this->getCurrency()->one()->USD;
     }
 }

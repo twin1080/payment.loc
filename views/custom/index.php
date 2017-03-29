@@ -33,14 +33,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'ID',
             'Time',
             'Sum',
+                [
+                'attribute'=>'UserID',
+                'label' => 'Customer',
+                'value' => function ($model) {
+                    return (string)$model->getUser()->one()->username;
+                },
+             ],
             ['class' => 'yii\grid\ActionColumn'],
            ],
     
             'rowOptions' => function ($model, $key, $index, $grid) {
             
-            $done = $model->getPayments()->sum('Sum');
-    
-            return ['class' => $done ? 'done' : ''];
+            return ['class' =>$model->fullyPaid() ? 'done' : ''];
 }
     ]); ?>
     

@@ -9,6 +9,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\ForbiddenHttpException;
 
 /**
  * CustomController implements the CRUD actions for Custom model.
@@ -36,6 +37,11 @@ class CustomController extends Controller
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => ['customer'],
+                    ],
                 ]   
             ],
         ];
@@ -47,10 +53,17 @@ class CustomController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Custom::find(),
-        ]);
-
+        if (Yii::$app->user->can('customer'))
+        {
+            $dataProvider = new ActiveDataProvider([
+            'query' => Custom::find()->where(['UserID'=>Yii::$app->user->getId()])]);       
+        }
+        else
+        {
+            $dataProvider = new ActiveDataProvider([
+            'query' => Custom::find()]);
+        }
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
@@ -63,8 +76,15 @@ class CustomController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        
+        if (!Yii::$app->user->identity->isAdmin() && $model->UserID !== Yii::$app->user->getId())
+        {
+              throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));        
+        }
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 

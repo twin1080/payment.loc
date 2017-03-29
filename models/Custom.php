@@ -10,6 +10,7 @@ use Yii;
  * @property integer $ID
  * @property string $Time
  * @property string $Sum
+ * @property integer $UserID
  *
  * @property Payment[] $payments
  */
@@ -32,6 +33,7 @@ class Custom extends \yii\db\ActiveRecord
             [['Time'], 'safe'],
             [['Sum'], 'required'],
             [['Sum'], 'number'],
+            [['UserID'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['UserID' => 'id']],
         ];
     }
 
@@ -43,7 +45,8 @@ class Custom extends \yii\db\ActiveRecord
         return [
             'ID' => 'Order number',
             'Time' => 'Creation time',
-            'Sum' => 'Order price',
+            'Sum' => 'Order price($)',
+            'UserID' => 'User ID',
         ];
     }
 
@@ -54,4 +57,24 @@ class Custom extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Payment::className(), ['CustomID' => 'ID']);
     }
+    
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'UserID']);
+    }
+    
+    public function fullyPaid()
+    {
+        $sum = 0;
+        foreach($this->getPayments()->all() as $pay)
+        {
+            $sum = $sum + $pay->getSumInUSD();
+        }
+            
+        return    $done = $this->Sum <= $sum;
+    }
+    
 }

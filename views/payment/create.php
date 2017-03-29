@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\ForexRate;
+use app\models\Custom;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Payment */
@@ -33,7 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-xs-12 col-md-4">
   <h1><?= Html::encode($this->title) ?></h1>
-    <?= $form->field($model, 'CustomID')->textInput(['autofocus'=>true]) ?>
+            
+         <?= $form->field($model, 'CustomID')->dropdownList(
+    Custom::find()->select(['ID', 'ID'])->where(['=','UserID', Yii::$app->user->getId()])->indexBy('ID')->column(),
+    ['prompt'=>'Select order number']);?>
+            
+            
            <div class="row">
                <div class="col-xs-7 col-md-7">
     <?= $form->field($model, 'Sum')->textInput(['maxlength' => true]) ?>

@@ -41,15 +41,24 @@ $this->params['breadcrumbs'][] = $this->title;
             'cvv',
             'CustomID',
             'Sum',
-            'Time',
-            'done',
             [
                 'attribute'=>'CurrencyID',
                 'label' => 'Currency',
                 'value' => function ($model) {
                     return (string)$model->getCurrency()->one()->Name;
                 },
-            ]
+            ],
+            
+            [
+                'attribute'=>'UserID',
+                'label' => 'Customer',
+                'value' => function ($model) {
+                    return (string)$model->getUser()->one()->username;
+                },
+            ],
+            'Time',
+            'done',
+    
         ],
     ]) ?>
 

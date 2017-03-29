@@ -1,6 +1,7 @@
 <?php
-
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use app\models\ForexRate;
 use yii\widgets\DetailView;
 use yii\widgets\Breadcrumbs;
 /* @var $this yii\web\View */
@@ -34,6 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'ID',
             'Time',
             'Sum',
+            [
+                'attribute'=>'UserID',
+                'label' => 'Customer',
+                'value' => function ($model) {
+                    return (string)$model->getUser()->one()->username;
+                },
+            ]
         ],
     ]) ?>
 

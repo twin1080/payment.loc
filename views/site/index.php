@@ -33,12 +33,19 @@ $this->title = 'Payment acceptance';
   <div class="body-content">
     
             <div class="col-lg-4">
-                <h2>Payments</h2>
+                <h2>My payments</h2>
 
                 <p>There is list of all your payments which you made.</p>
 
                 <p> <?= Html::a('Here>>',Url::toRoute('payment/index'),  ['class' => 'btn btn-default']) ?></p>
             </div>
+      
+            <div class="col-lg-4">
+                <h2>My orders</h2>
+                <p>There is all orders for your.</p>
+                <p> <?= Html::a('Here>>',Url::toRoute('custom/index'),  ['class' => 'btn btn-default']) ?></p>
+            </div>
+
     </div>
     
 </div>
