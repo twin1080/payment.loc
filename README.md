@@ -14,7 +14,7 @@ password: admin
 
 User data is storing in database, in table user. You can add new admin, if you really want, but you will have to get md5 hash for new password. Sorry, I didn't make special interface for that deal.
 
-I made dump of my database. It is file payment.sql, I hope it works.
+I made dump of my database. It is file payment.sql. It can be work for MariaDB, I hope it works.
 You should deploy this database and change file config\db.php as you need.
 
 I tested my project with XAMPP. I am not sure about other deploy packages, but i don't know hich problem can exist.
