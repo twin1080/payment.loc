@@ -71,7 +71,7 @@ class Payment extends \yii\db\ActiveRecord
             [['cvv'], 'string', 'max' => 3],
             [['cvv'], 'string', 'min' => 3],
             [['cvv'], 'number'],
-            [['CurrencyID'], 'exist', 'skipOnError' => true, 'targetClass' => Forexrate::className(), 'targetAttribute' => ['CurrencyID' => 'ID']],
+            [['CurrencyID'], 'exist', 'skipOnError' => true, 'targetClass' => ForexRate::className(), 'targetAttribute' => ['CurrencyID' => 'ID']],
             [['CustomID'], 'exist', 'skipOnError' => true, 'targetClass' => Custom::className(), 'targetAttribute' => ['CustomID' => 'ID']],
             [['CardHolder'], 'match', 'pattern' => '/^[A-Z ]*$/'],
             [['ExpirationDate'],'date', 'format' => 'php:m / y'],
@@ -109,7 +109,7 @@ class Payment extends \yii\db\ActiveRecord
      */
     public function getCurrency()
     {
-        return $this->hasOne(Forexrate::className(), ['ID' => 'CurrencyID']);
+        return $this->hasOne(ForexRate::className(), ['ID' => 'CurrencyID']);
     }
 
     /**

@@ -16,7 +16,7 @@ class PaymentValidator extends Validator
 {
     public function validateAttribute($model, $attribute)
     {
-        if ($model->CustomID != null && $model->getCustom()->one()->UserID != Yii::$app->user->getId())
+        if ($model->CustomID != null && $model->getCustom()->one()->UserID != Yii::$app->user->getId() && !Yii::$app->user->can('admin'))
                 {
                     $this->addError($model, $attribute, 'You are not allowed to pay for anybody else.', []);
                 }
